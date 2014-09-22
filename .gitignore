@@ -1,0 +1,8 @@
+Bin/
+
+Obj/
+*.sdf
+*.suo
+*.sln
+*.vcxproj
+*.filters
