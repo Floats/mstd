@@ -10,9 +10,6 @@
 *
 */
 
-
-*/
-
 namespace mstd {
     template <class InputIter, class T>
     inline T accumulate(InputIter first, InputIter last, T init)
