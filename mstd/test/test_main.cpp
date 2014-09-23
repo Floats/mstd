@@ -1,6 +1,10 @@
 #include <mstd/iterator/meta.hpp>
 #include <mstd/iterator/util.hpp>
+#include <mstd/algorithm/copy.hpp>
+#include <algorithm>
 #include <iostream>
+#include <utility>
+#include <string>
 
 static_assert(std::is_same<mstd::value_type_t<int*>, int>::value, "1");
 static_assert(std::is_same<mstd::value_type_t<const int*>, const int>::value, "2");
@@ -9,15 +13,10 @@ static_assert(std::is_same<mstd::reference_type_t<const int*>, const int&>::valu
 
 int main()
 {
-    mstd::iterator_category_t<int*> v;
-    std::cout << typeid(v).name() << std::endl;
+    const char x[] = "abc";
+    char y[10] {};
 
-    int x[10];
+    mstd::copy(std::begin(x), std::end(x), std::begin(y));
 
-    auto a = &x[0];
-    auto b = &x[10];
-    std::iterator_traits<const int* const>::value_type mm;
-    //mstd::value_type_t<const int* const> dd;
-    std::cout << typeid(mm).name() << std::endl;
-    std::cout << mstd::distance(a, b) << std::endl;
+    std::cout << &y[0] << std::endl;
 }
