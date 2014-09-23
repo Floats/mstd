@@ -5,6 +5,9 @@
  *
  * \brief meta functions for Iterator
  *
+ * Note that we only need to specialized T* and const T* for T* const are not wriable such that
+ * they are both not random access iterators.
+ *
  */
 
 #include <cstddef>
@@ -20,11 +23,6 @@ namespace mstd {
 
     template <class T>
     struct iterator_category<T*> {
-        using type = random_access_iterator_tag;
-    };
-
-    template <class T>
-    struct iterator_category<const T*> {
         using type = random_access_iterator_tag;
     };
 
@@ -44,11 +42,6 @@ namespace mstd {
         using type = T;
     };
 
-    template <class T>
-    struct value_type<const T*> {
-        using type = const T;
-    };
-
     template <class Iterator>
     using value_type_t = typename value_type<Iterator>::type;
     //! @}
@@ -62,11 +55,6 @@ namespace mstd {
 
     template <class T>
     struct difference_type<T*> {
-        using type = std::ptrdiff_t;
-    };
-
-    template <class T>
-    struct difference_type<const T*> {
         using type = std::ptrdiff_t;
     };
 
@@ -86,11 +74,6 @@ namespace mstd {
         using type = T*;
     };
 
-    template <class T>
-    struct pointer_type<const T*> {
-        using type = const T*;
-    };
-
     template <class Iterator>
     using pointer_type_t = typename pointer_type<Iterator>::type;
     //! @}
@@ -105,11 +88,6 @@ namespace mstd {
     template <class T>
     struct reference_type<T*> {
         using type = T&;
-    };
-
-    template <class T>
-    struct reference_type<const T*> {
-        using type = const T&;
     };
 
     template <class Iterator>
