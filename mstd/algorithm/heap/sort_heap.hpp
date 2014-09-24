@@ -4,7 +4,7 @@
 #include <mstd/algorithm/heap/pop_heap.hpp>
 
 namespace mstd {
-    template <class RandIter, class RandIter>
+    template <class RandIter>
     void sort_heap(RandIter first, RandIter last)
     {
         for (; first != last; --last) {
@@ -12,7 +12,7 @@ namespace mstd {
         }
     }
 
-    template <class RandIter, class RandIter, class Comp>
+    template <class RandIter, class Comp>
     void sort_heap(RandIter first, RandIter last, Comp cmp)
     {
         for (; first != last; --last) {
