@@ -92,7 +92,7 @@ namespace mstd {
                         break;
                     }
                     else {
-                        swap(elem_[par], elem_[curr]);
+                        mstd::swap(elem_[par], elem_[curr]);
 
                         // update
                         curr = par;
@@ -104,10 +104,10 @@ namespace mstd {
             {
                 auto curr = h;
 
-                while (this->has_left_child(h)) {
+                while (this->has_left_child(curr)) {
                     auto candidate = this->left_child(curr);
-                    if (this->has_right_child(h)) {
-                        auto rc = this->right_child(h);
+                    if (this->has_right_child(curr)) {
+                        auto rc = this->right_child(curr);
                         candidate = cmp_(elem_[candidate], elem_[rc])?
                                         rc:
                                         candidate;
@@ -118,7 +118,7 @@ namespace mstd {
                     }
                     else {
                         // update
-                        swap(elem_[curr], elem_[candidate]);
+                        mstd::swap(elem_[curr], elem_[candidate]);
                         curr = candidate;
                     }
                 }

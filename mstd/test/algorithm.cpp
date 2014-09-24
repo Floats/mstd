@@ -86,4 +86,109 @@ BOOST_AUTO_TEST_CASE(pop_heap)
         v.pop_back();
         cv.pop_back();
     }
+
+    v = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::make_heap(v.begin(), v.end());
+    cv = v;
+
+    while (!v.empty()) {
+        mstd::pop_heap(v.begin(), v.end());
+        std::pop_heap(cv.begin(), cv.end());
+
+        BOOST_CHECK_EQUAL(v.front(), cv.front());
+        BOOST_CHECK_EQUAL(v.back(), cv.back());
+
+        v.pop_back();
+        cv.pop_back();
+    }
+}
+
+BOOST_AUTO_TEST_CASE(make_heap)
+{
+    std::vector<int> v {1,2,3,4,5,6,6,7,3};
+    auto cv = v;
+
+    std::make_heap(v.begin(), v.end());
+    mstd::make_heap(cv.begin(), cv.end());
+
+    while (!v.empty()) {
+        mstd::pop_heap(v.begin(), v.end());
+        std::pop_heap(cv.begin(), cv.end());
+
+        BOOST_CHECK_EQUAL(v.front(), cv.front());
+        BOOST_CHECK_EQUAL(v.back(), cv.back());
+
+        v.pop_back();
+        cv.pop_back();
+    }
+
+    v = {0, 0, 0, 0};
+    cv = v;
+
+    std::make_heap(v.begin(), v.end());
+    mstd::make_heap(cv.begin(), cv.end());
+
+    while (!v.empty()) {
+        mstd::pop_heap(v.begin(), v.end());
+        std::pop_heap(cv.begin(), cv.end());
+
+        BOOST_CHECK_EQUAL(v.front(), cv.front());
+        BOOST_CHECK_EQUAL(v.back(), cv.back());
+
+        v.pop_back();
+        cv.pop_back();
+    }
+
+    v = {8, 9, 1, 3, 12, 5, 10, 3, 1, 100, 3, 23, -1, -33};
+    cv = v;
+
+    std::make_heap(v.begin(), v.end());
+    mstd::make_heap(cv.begin(), cv.end());
+
+    while (!v.empty()) {
+        mstd::pop_heap(v.begin(), v.end());
+        std::pop_heap(cv.begin(), cv.end());
+
+        BOOST_CHECK_EQUAL(v.front(), cv.front());
+        BOOST_CHECK_EQUAL(v.back(), cv.back());
+
+        v.pop_back();
+        cv.pop_back();
+    }
+
+}
+
+std::vector<int> heap_sort(const std::initializer_list<int>& l)
+{
+    std::vector<int> v(l);
+
+    mstd::make_heap(v.begin(), v.end());
+    mstd::sort_heap(v.begin(), v.end());
+
+    return v;
+}
+
+
+BOOST_AUTO_TEST_CASE(sort_heap)
+{
+    auto v = heap_sort({});
+    BOOST_REQUIRE(std::is_sorted(v.begin(), v.end()));
+
+    v = heap_sort({1});
+    BOOST_REQUIRE(std::is_sorted(v.begin(), v.end()));
+
+    v = heap_sort({1, 1});
+    BOOST_REQUIRE(std::is_sorted(v.begin(), v.end()));
+
+    v = heap_sort({2, 4});
+    BOOST_REQUIRE(std::is_sorted(v.begin(), v.end()));
+
+    v = heap_sort({1, 2, 3});
+    BOOST_REQUIRE(std::is_sorted(v.begin(), v.end()));
+
+    v = heap_sort({2, 2, 2});
+    BOOST_REQUIRE(std::is_sorted(v.begin(), v.end()));
+
+    v = heap_sort({10, -1, 3, 33, 22});
+    BOOST_REQUIRE(std::is_sorted(v.begin(), v.end()));
 }

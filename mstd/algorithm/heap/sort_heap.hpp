@@ -8,7 +8,7 @@ namespace mstd {
     void sort_heap(RandIter first, RandIter last)
     {
         for (; first != last; --last) {
-            pop_heap(first, last);
+            mstd::pop_heap(first, last);
         }
     }
 
@@ -16,7 +16,7 @@ namespace mstd {
     void sort_heap(RandIter first, RandIter last, Comp cmp)
     {
         for (; first != last; --last) {
-            pop_heap(first, last, cmp);
+            mstd::pop_heap(first, last, cmp);
         }
     }
 } // of namespace mstd
