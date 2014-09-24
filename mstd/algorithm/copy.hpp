@@ -4,12 +4,18 @@
 #include <cstring>
 #include <type_traits>
 #include <mstd/iterator/meta.hpp>
+#include <mstd/detail/concept.hpp>
+#include <mstd/iterator/concept.hpp>
 
 namespace mstd {
     namespace detail {
         template <class InputIter, class OutputIter>
-        OutputIter copy_imp_(InputIter first, InputIter last, OutputIter result)
+        require<InputIterator<InputIter>() && !RandomAccessIterator<InputIter>(), OutputIter>
+            copy_imp_(InputIter first, InputIter last, OutputIter result)
         {
+            static_assert(InputIterator<InputIter>() && !RandomAccessIterator<InputIter>(),
+                          "bad dispatching");
+
             for (; first != last; ++first, ++result) {
                 *result = *first;
             }
@@ -17,9 +23,15 @@ namespace mstd {
             return result;
         }
 
-        template <class InputIter, class OutputIter>
-        OutputIter copy_n_(InputIter first, OutputIter result, decltype(first - first) n)
+        template <class RandIter, class OutputIter>
+        require<RandomAccessIterator<RandIter>(), OutputIter>
+            copy_imp_(RandIter first, RandIter last, OutputIter result)
         {
+            static_assert(RandomAccessIterator<RandIter>(),
+                          "bad dispatching");
+
+            auto n = last - first;
+            
             for (; n > 0; --n, ++first, ++result) {
                 *result = *first;
             }
@@ -28,19 +40,22 @@ namespace mstd {
         }
 
         template <class InputIter, class OutputIter>
-        OutputIter copy_aux_(InputIter first, InputIter last, OutputIter result)
+        inline OutputIter copy_aux_(InputIter first, InputIter last, OutputIter result)
         {
-            //! Actuall I deem that this selection will be optimized out via DEAD CODE ILIMINATION
-            if (std::is_same<random_access_iterator_tag, iterator_category_t<InputIter>>::value) {
-                return copy_n_(first, result, last - first);
-            }
-            else {
-                return copy_imp_(first, last, result);
-            }
+            return copy_imp_(first, last, result);
         }
 
         template <class T1, class T2>
-        T2* copy_aux_(T1* first, T1* last, T2* result, std::true_type has_trivial_copy)
+        constexpr bool BitCopyable()
+        {
+            using t1 = typename std::remove_const<T1>::type;
+            return std::has_trivial_copy_assign<T1>::value &&
+                   std::is_same<t1, T2>::value;
+        }
+
+        template <class T1, class T2>
+        inline require<BitCopyable<T1, T2>(),T2*>
+            copy_aux_(T1* first, T1* last, T2* result)
         {
             const auto n = last - first;
 
@@ -50,28 +65,10 @@ namespace mstd {
         }
 
         template <class T1, class T2>
-        inline T2* copy_aux_(T1* first, T1* last, T2* result, std::false_type dont_has_trivial_copy)
+        inline require<!BitCopyable<T1, T2>(), T2*>
+            copy_aux_(T1* first, T1* last, T2* result)
         {
-            return copy_n_(first, result, last - first);
-        }
-
-        template <class T1, class T2>
-        struct can_accelerate_ {
-            using t1 = typename std::remove_const<T1>::type;
-            static constexpr bool value =
-                    std::has_trivial_copy_assign<T1>::value &&
-                    std::is_same<t1, T2>::value;
-        };
-
-        template <class T1, class T2>
-        inline T2* copy_aux_(T1* first, T1* last, T2* result)
-        {
-            return copy_aux_(first, last, result, 
-                typename std::conditional<
-                    can_accelerate_<T1, T2>::value,
-                    std::true_type, 
-                    std::false_type>::type{}
-            );
+            return copy_imp_(first, last, result);
         }
     } // of namespace detail
 
