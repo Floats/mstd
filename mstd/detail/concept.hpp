@@ -5,7 +5,7 @@
 
 namespace mstd {
     template <bool T, class Ty = void>
-    using require = typename std::enable_if<T, Ty>::type;
+    using Require = typename std::enable_if<T, Ty>::type;
 }  // of namespace mstd
 
 

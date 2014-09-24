@@ -10,8 +10,8 @@
 namespace mstd {
     namespace detail {
         template <class InputIter, class OutputIter>
-        require<InputIterator<InputIter>() && !RandomAccessIterator<InputIter>(), OutputIter>
-            copy_imp_(InputIter first, InputIter last, OutputIter result)
+        Require<InputIterator<InputIter>() && !RandomAccessIterator<InputIter>(), OutputIter>
+            copy_aux_(InputIter first, InputIter last, OutputIter result)
         {
             static_assert(InputIterator<InputIter>() && !RandomAccessIterator<InputIter>(),
                           "bad dispatching");
@@ -24,8 +24,8 @@ namespace mstd {
         }
 
         template <class RandIter, class OutputIter>
-        require<RandomAccessIterator<RandIter>(), OutputIter>
-            copy_imp_(RandIter first, RandIter last, OutputIter result)
+        Require<RandomAccessIterator<RandIter>(), OutputIter>
+            copy_aux_(RandIter first, RandIter last, OutputIter result)
         {
             static_assert(RandomAccessIterator<RandIter>(),
                           "bad dispatching");
@@ -39,12 +39,6 @@ namespace mstd {
             return result;
         }
 
-        template <class InputIter, class OutputIter>
-        inline OutputIter copy_aux_(InputIter first, InputIter last, OutputIter result)
-        {
-            return copy_imp_(first, last, result);
-        }
-
         template <class T1, class T2>
         constexpr bool BitCopyable()
         {
@@ -54,7 +48,7 @@ namespace mstd {
         }
 
         template <class T1, class T2>
-        inline require<BitCopyable<T1, T2>(),T2*>
+        inline Require<BitCopyable<T1, T2>(),T2*>
             copy_aux_(T1* first, T1* last, T2* result)
         {
             const auto n = last - first;
@@ -62,13 +56,6 @@ namespace mstd {
             std::memmove(result, first, sizeof(T2) * n);
 
             return result + n;
-        }
-
-        template <class T1, class T2>
-        inline require<!BitCopyable<T1, T2>(), T2*>
-            copy_aux_(T1* first, T1* last, T2* result)
-        {
-            return copy_imp_(first, last, result);
         }
     } // of namespace detail
 
