@@ -8,7 +8,7 @@ namespace mstd {
     std::pair<InputIter1, InputIter2> mismatch(
         InputIter1 first1, InputIter1 last1, InputIter2 first2)
     {
-        for (; first1 != last1 && *first1 == *first2; ++first1£¬ ++first2) {}
+        for (; first1 != last1 && *first1 == *first2; ++first1, ++first2) {}
         
         return std::make_pair(first1, first2);
     }
@@ -17,7 +17,7 @@ namespace mstd {
     std::pair<InputIter1, InputIter2> mismatch(
         InputIter1 first1, InputIter1 last1, InputIter2 first2, BinPred pred)
     {
-        for (; first1 != last1 && pred(first1, first2); ++first1£¬ ++first2) {}
+        for (; first1 != last1 && pred(first1, first2); ++first1, ++first2) {}
 
         return std::make_pair(first1, first2);
     }

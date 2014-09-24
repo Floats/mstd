@@ -31,7 +31,7 @@ namespace mstd {
         OutputIter copy_aux_(InputIter first, InputIter last, OutputIter result)
         {
             //! Actuall I deem that this selection will be optimized out via DEAD CODE ILIMINATION
-            if (std::is_same<random_access_iterator_tag, iterator_category<InputIter>>::value) {
+            if (std::is_same<random_access_iterator_tag, iterator_category_t<InputIter>>::value) {
                 return copy_n_(first, result, last - first);
             }
             else {
@@ -56,14 +56,21 @@ namespace mstd {
         }
 
         template <class T1, class T2>
+        struct can_accelerate_ {
+            using t1 = typename std::remove_const<T1>::type;
+            static constexpr bool value =
+                    std::has_trivial_copy_assign<T1>::value &&
+                    std::is_same<t1, T2>::value;
+        };
+
+        template <class T1, class T2>
         inline T2* copy_aux_(T1* first, T1* last, T2* result)
         {
-            using has_trivial_copy = typename std::is_trivially_copy_assignable<T2>::type;
-            using is_same = typename std::is_same<std::remove_const_t<T1>, T2>::type;
             return copy_aux_(first, last, result, 
-                std::conditional_t<has_trivial_copy::value && is_same::value, 
+                typename std::conditional<
+                    can_accelerate_<T1, T2>::value,
                     std::true_type, 
-                    std::false_type>{}
+                    std::false_type>::type{}
             );
         }
     } // of namespace detail

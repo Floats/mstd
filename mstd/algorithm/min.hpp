@@ -3,13 +3,13 @@
 
 namespace mstd {
     template <class T>
-    inline /*const*/ T& min(/*const*/ T& x, /*const*/ T& y)
+    inline constexpr/*const*/ T& min(/*const*/ T& x, /*const*/ T& y)
     {
         return x < y ? x : y;
     }
 
     template <class T, class Cmp>
-    inline /*const*/ T& min(/*const*/ T& x, /*const*/ T& y, Cmp cmp)
+    inline constexpr/*const*/ T& min(/*const*/ T& x, /*const*/ T& y, Cmp cmp)
     {
         return cmp(x, y) ? x : y;
     }

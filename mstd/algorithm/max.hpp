@@ -13,13 +13,13 @@
 
 namespace mstd {
     template <class T>
-    inline /*const*/ T& max(/*const*/ T& x, /*const*/ T& y)
+    inline constexpr/*const*/ T& max(/*const*/ T& x, /*const*/ T& y)
     {
         return x < y ? y : x;
     }
 
     template <class T, class Cmp>
-    inline /*const*/ T& max(/*const*/ T& x, /*const*/ T& y, Cmp cmp)
+    inline constexpr/*const*/ T& max(/*const*/ T& x, /*const*/ T& y, Cmp cmp)
     {
         return cmp(x, y) ? y : x;
     }
