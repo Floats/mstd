@@ -2,7 +2,7 @@ project(std)
 
 cmake_minimum_required(VERSION 2.8)
 
-add_definitions("-std=c++11 -Wall")
+add_definitions("-std=c++1y -Wall")
 
 set(BOOST_ROOT $ENV{Boost})
 

@@ -1,5 +1,5 @@
-#ifndef MSTD_ALLOCATOR_HPP_
-#define MSTD_ALLOCATOR_HPP_
+#ifndef MSTD_MEMORY_ALLOCATOR_HPP_
+#define MSTD_MEMORY_ALLOCATOR_HPP_
 
 #include <cstddef>
 #include <new>
@@ -19,10 +19,10 @@ namespace mstd {
 
         pointer allocate(size_type n)
         {
-            return ::operator new(n * sizeof(T));
+            return static_cast<pointer>(::operator new(n * sizeof(T)));
         }
 
-        pointer deallocate(pointer buffer)
+        void deallocate(pointer buffer)
         {
             ::operator delete(buffer);
         }
@@ -60,4 +60,4 @@ namespace mstd {
     };
 }  // of namespace mstd
 
-#endif //! MSTD_ALLOCATOR_HPP_
+#endif //! MSTD_MEMORY_ALLOCATOR_HPP_
