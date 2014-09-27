@@ -2,14 +2,18 @@
 #define MSTD_CONTAINER_HASH_FUNCTION_HPP_
 
 #include <type_traits>
-#include <mstd/detail/concept.hpp>
 
 namespace mstd {
-    template <class T>
-    constexpr Require<std::is_integer<T>::value, T>
-        hash(T x) noexcept
-    {
-        return x;
+    using hash_code = std::size_t;
+
+    template <class T> struct hash;
+
+    template <>
+    struct hash<int> {
+        constexpr hash_code operator()(int x) const noexcept
+        {
+            return x;
+        }
     };
 }  // of namespace mstd
 

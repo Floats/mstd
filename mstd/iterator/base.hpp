@@ -25,22 +25,23 @@ namespace mstd {
         using reference_type = Reference;
     };
 
-    template <class T, class Diff>
+    template <class T, class Diff = std::ptrdiff_t>
     struct input_iterator : 
         public iterator<input_iterator_tag, T, Diff> {};
 
+    template <class T, class Diff = std::ptrdiff_t>
     struct output_iterator :
-        public iterator<output_iterator_tag, void, void> {};
+        public iterator<output_iterator_tag, T, Diff> {};
 
-    template <class T, class Diff>
+    template <class T, class Diff = std::ptrdiff_t>
     struct forward_iterator :
         public iterator<forward_iterator_tag, T, Diff> {};
 
-    template <class T, class Diff>
+    template <class T, class Diff = std::ptrdiff_t>
     struct bidirectional_iterator :
         public iterator<bidirectional_iterator_tag, T, Diff> {};
 
-    template <class T, class Diff>
+    template <class T, class Diff = std::ptrdiff_t>
     struct random_access_iterator :
         public iterator<random_access_iterator_tag, T, Diff> {};
 } // of namespace mstd

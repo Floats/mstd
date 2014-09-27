@@ -17,6 +17,16 @@ namespace mstd {
         using size_type = std::size_t;
         using difference_type = std::ptrdiff_t;
 
+        template <class U>
+        struct rebind {
+            using other = allocator<U>;
+        };
+
+        allocator() = default;
+
+        template <class U>
+        allocator(const allocator<U>&) {}
+
         pointer allocate(size_type n)
         {
             return static_cast<pointer>(::operator new(n * sizeof(T)));
@@ -25,6 +35,13 @@ namespace mstd {
         void deallocate(pointer buffer)
         {
             ::operator delete(buffer);
+        }
+
+        void deallocate(pointer buffer, size_type n)
+        {
+            while (n-- > 0) {
+                this->deallocate(buffer++);
+            }
         }
 
         void construct(pointer p, const_reference value)
