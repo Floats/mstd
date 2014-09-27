@@ -12,12 +12,13 @@
 
 #include <cstddef>
 #include <mstd/iterator/tag.hpp>
+#include <mstd/utility/rel_ops.hpp>
 
 namespace mstd {
     template <class Category, class T, 
             class Diff = std::ptrdiff_t, 
             class Pointer = T*, class Reference = T&>
-    struct iterator {
+    struct iterator : private rel_ops::comparable {
         using iterator_category = Category;
         using value_type = T;
         using difference_type = Diff;

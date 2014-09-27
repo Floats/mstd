@@ -53,9 +53,7 @@ namespace mstd {
             friend struct iterator_;
             friend struct const_iterator_;
 
-            struct iterator_ :
-                    public forward_iterator<value_type>,
-                    private comparable {
+            struct iterator_ : public forward_iterator<value_type> {
             public:
                 using self_type = iterator_;
 
@@ -138,7 +136,7 @@ namespace mstd {
                 friend class const_iterator_;
                 friend class hash_table;
 
-                iterator_(hash_table& table)
+                explicit iterator_(hash_table& table)
                     : table_(table)
                 {
                 }
@@ -154,9 +152,7 @@ namespace mstd {
                 std::unique_ptr<node_iterator> iter_;
             };
 
-            struct const_iterator_ :
-                    public forward_iterator<const value_type>,
-                    private comparable {
+            struct const_iterator_ : public forward_iterator<const value_type> {
                 using self_type = const_iterator_;
 
                 const_reference operator*() const
@@ -217,7 +213,7 @@ namespace mstd {
 
             public:
                 const_iterator_(iterator_ iter)
-                    : const_iterator_(iter.table_, std::move(iter.iter_))
+                    : const_iterator_{iter.table_, std::move(*iter.iter_)}
                 {}
 
                 const_iterator_(const self_type& other)
@@ -240,12 +236,12 @@ namespace mstd {
 
                 friend class hash_table;
 
-                const_iterator_(hash_table& table)
+                explicit const_iterator_(const hash_table& table)
                     : table_(table)
                 {
                 }
 
-                const_iterator_(hash_table& table, node_iterator iter)
+                const_iterator_(const hash_table& table, node_iterator iter)
                     : table_(table), iter_{new node_iterator{iter}}
                 {
                 }
@@ -318,12 +314,12 @@ namespace mstd {
 
             const_iterator cbegin() const
             {
-                return {self_()->begin()};
+                return {self_().begin()};
             }
 
             iterator end()
             {
-                return {*this};
+                return iterator{*this};
             }
 
             const_iterator end() const
@@ -333,7 +329,7 @@ namespace mstd {
 
             const_iterator cend() const
             {
-                return {*this};
+                return const_iterator{*this};
             }
             //! @}
 
@@ -367,7 +363,7 @@ namespace mstd {
 
             const_iterator find(const_reference obj) const
             {
-                return {self_()->find(obj)};
+                return {self_().find(obj)};
             }
 
             std::pair<iterator, iterator> equal_range(reference obj)
@@ -393,7 +389,7 @@ namespace mstd {
             std::pair<const_iterator, const_iterator>
                 equal_range(reference obj) const
             {
-                return {self_()->equal_range(obj)};
+                return {self_().equal_range(obj)};
             }
             //! @}
 

@@ -10,6 +10,17 @@ BOOST_AUTO_TEST_CASE(hash_table_base)
     BOOST_REQUIRE(table.empty());
 }
 
+BOOST_AUTO_TEST_CASE(hash_table_iterators)
+{
+    mstd::detail::hash_table<int, int> table;
+    const auto& ctable = table;
+
+    BOOST_REQUIRE(table.begin() == table.end());
+    //BOOST_REQUIRE(table.cbegin() == table.cend());
+    //BOOST_REQUIRE(ctable.begin() == ctable.end());
+    //BOOST_REQUIRE(ctable.cbegin() == ctable.cend());
+}
+/*
 BOOST_AUTO_TEST_CASE(hash_table_insert_1)
 {
     mstd::detail::hash_table<int, int> table;
@@ -25,7 +36,7 @@ BOOST_AUTO_TEST_CASE(hash_table_insert_1)
     BOOST_REQUIRE(!table.empty());
 }
 
-/*
+
 BOOST_AUTO_TEST_CASE(hash_table_insert)
 {
     mstd::detail::hash_table<int, int> table;
