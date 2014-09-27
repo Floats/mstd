@@ -1,8 +1,5 @@
 #include <boost/test/unit_test.hpp>
-#include <utility>
 #include <mstd/container/hash/hash_table.hpp>
-
-using namespace std::rel_ops;
 
 BOOST_AUTO_TEST_CASE(hash_table_base)
 {

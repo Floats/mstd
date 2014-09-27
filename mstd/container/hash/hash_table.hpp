@@ -15,6 +15,7 @@
 #include <mstd/container/hash/hash_function.hpp>
 #include <mstd/iterator/base.hpp>
 #include <mstd/iterator/util.hpp>
+#include <mstd/utility/rel_ops.hpp>
 
 namespace mstd {
     namespace detail {
@@ -24,7 +25,7 @@ namespace mstd {
                   class EqualObj = std::equal_to<Value>,
                   class Allocator = allocator<Value>
                   >
-        class hash_table {
+        class hash_table : private comparable {
         private:
             struct iterator_;
             struct const_iterator_;
@@ -52,7 +53,9 @@ namespace mstd {
             friend struct iterator_;
             friend struct const_iterator_;
 
-            struct iterator_ : public forward_iterator<value_type> {
+            struct iterator_ :
+                    public forward_iterator<value_type>,
+                    private comparable {
             public:
                 using self_type = iterator_;
 
@@ -151,7 +154,9 @@ namespace mstd {
                 std::unique_ptr<node_iterator> iter_;
             };
 
-            struct const_iterator_ : public forward_iterator<const value_type> {
+            struct const_iterator_ :
+                    public forward_iterator<const value_type>,
+                    private comparable {
                 using self_type = const_iterator_;
 
                 const_reference operator*() const
