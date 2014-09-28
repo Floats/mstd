@@ -27,6 +27,9 @@ namespace mstd {
 
         public:  // mixins
             //! \fix find the cause of the error
+            //! where the error comes from?
+            //!     Because the base class is a dependent name, so unqualified
+            //!     identifiers will be resolved at definition time.
             auto& operator*() const
             {
                 return *child().iter_;
