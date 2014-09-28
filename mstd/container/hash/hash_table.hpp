@@ -212,9 +212,13 @@ namespace mstd {
                 }
 
             public:
-                const_iterator_(iterator_ iter)
-                    : const_iterator_{iter.table_, std::move(*iter.iter_)}
-                {}
+                const_iterator_(const iterator_& iter)
+                    : const_iterator_{iter.table_}
+                {
+                    if (iter.iter_) {
+                        iter_.reset(new node_iterator{*iter.iter_});
+                    }
+                }
 
                 const_iterator_(const self_type& other)
                     : table_(other.table_), iter_{}
@@ -252,13 +256,20 @@ namespace mstd {
             };
 
         public:
-            hash_table() = default;
+            hash_table()
+                : hash_table({}, {}, {}, {})
+            {
+            }
+
+            //! \todo   fix compiler bug: {} not usable for copy ctor
             hash_table(ExtractKey ek, Hash hasher, EqualObj eq, Allocator alloc)
-                : extract_{ek},
-                  hash_{hasher},
-                  equal_{eq},
-                  alloc_{alloc}
-            {}
+                : buckets_(1),
+                  hash_(hasher),
+                  extract_(ek),
+                  equal_(eq),
+                  alloc_(alloc)
+            {
+            }
 
             hash_table(const hash_table& other) = default;
             hash_table(hash_table&& other) = default;
@@ -366,7 +377,7 @@ namespace mstd {
                 return {self_().find(obj)};
             }
 
-            std::pair<iterator, iterator> equal_range(reference obj)
+            std::pair<iterator, iterator> equal_range(const_reference obj)
             {
                 auto& nodes = get_bucket_(obj);
                 auto iter = std::find_if(nodes.begin(), nodes.end(),
@@ -377,7 +388,9 @@ namespace mstd {
                 if (iter != nodes.end()) {
                     auto other = iter;
 
-                    for (; other != nodes.end() && equal_(*other, obj); ++other) {}
+                    for (++other;
+                         other != nodes.end() && equal_(*other, obj);
+                         ++other) {}
 
                     return {{*this, iter}, {*this, other}};
                 }
@@ -387,7 +400,7 @@ namespace mstd {
             }
 
             std::pair<const_iterator, const_iterator>
-                equal_range(reference obj) const
+                equal_range(const_reference obj) const
             {
                 return {self_().equal_range(obj)};
             }
@@ -440,11 +453,11 @@ namespace mstd {
             void ensure_space_(size_type new_size)
             {
                 if (new_size > this->bucket_size()) {
-                    bucket_vector v(std::min(size_type(11), this->bucket_size() * 2));
+                    bucket_vector v(std::min(size_type(1), this->bucket_size() * 2));
 
                     for (auto& nodes : buckets_) {
                         for (auto& node : nodes) {
-                            const auto bnum = bucket_num_(node, new_size);
+                            const auto bnum = bucket_num_(node);
                             v[bnum].push_front(std::move(node));
                         }
                     }
@@ -511,15 +524,10 @@ namespace mstd {
                 return extract_(obj);
             }
 
-            size_type bucket_num_(const_reference obj, size_type n) const
-            {
-                return hash_(key_(obj)) % n;
-            }
-
-
             size_type bucket_num_(const_reference obj) const
             {
-                return bucket_num_(obj, this->size());
+                assert(buckets_.size());
+                return hash_(key_(obj)) % buckets_.size();
             }
 
             auto& get_bucket_(const_reference obj)
@@ -540,10 +548,10 @@ namespace mstd {
         private:
             bucket_vector buckets_;
             size_type size_{};
-            Hash hash_{};
-            ExtractKey extract_{};
-            EqualObj equal_{};
-            Allocator alloc_{};
+            Hash hash_;
+            ExtractKey extract_;
+            EqualObj equal_;
+            Allocator alloc_;
         };
     }  // of namespace detail
 }  // of namespace mstd

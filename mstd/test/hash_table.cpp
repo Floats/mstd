@@ -5,7 +5,6 @@ BOOST_AUTO_TEST_CASE(hash_table_base)
 {
     mstd::detail::hash_table<int, int> table;
 
-    BOOST_REQUIRE_EQUAL(table.bucket_size(), 0);
     BOOST_REQUIRE_EQUAL(table.size(), 0);
     BOOST_REQUIRE(table.empty());
 }
@@ -16,26 +15,33 @@ BOOST_AUTO_TEST_CASE(hash_table_iterators)
     const auto& ctable = table;
 
     BOOST_REQUIRE(table.begin() == table.end());
-    //BOOST_REQUIRE(table.cbegin() == table.cend());
-    //BOOST_REQUIRE(ctable.begin() == ctable.end());
-    //BOOST_REQUIRE(ctable.cbegin() == ctable.cend());
+    BOOST_REQUIRE(table.cbegin() == table.cend());
+    BOOST_REQUIRE(ctable.begin() == ctable.end());
+    BOOST_REQUIRE(ctable.cbegin() == ctable.cend());
 }
-/*
+
 BOOST_AUTO_TEST_CASE(hash_table_insert_1)
 {
     mstd::detail::hash_table<int, int> table;
+    BOOST_REQUIRE(table.empty());
 
-    for (auto x : {1,2,3,4,5}) {
+    table.insert_unique(0);
+    BOOST_REQUIRE_EQUAL(table.size(), 1);
+    BOOST_REQUIRE(!table.empty());
+
+    auto list = {1, 2, 3, 4, 5, 6};
+
+    for (auto x : list) {
         auto iter = table.insert_unique(x);
 
         BOOST_REQUIRE(iter.first != table.end());
         BOOST_REQUIRE_EQUAL(*iter.first, x);
         BOOST_REQUIRE(iter.second);
     }
-    BOOST_REQUIRE_EQUAL(table.size(), 5);
+
+    BOOST_REQUIRE_EQUAL(table.size(), list.size() + 1);
     BOOST_REQUIRE(!table.empty());
 }
-
 
 BOOST_AUTO_TEST_CASE(hash_table_insert)
 {
@@ -49,7 +55,6 @@ BOOST_AUTO_TEST_CASE(hash_table_insert)
     }
     BOOST_REQUIRE_EQUAL(table.size(), 5);
     BOOST_REQUIRE(!table.empty());
-    BOOST_TEST_MESSAGE("insert_unique");
 
     for (auto x : {1,2,3,4,5}) {
         auto iter = table.insert_unique(x);
@@ -59,7 +64,6 @@ BOOST_AUTO_TEST_CASE(hash_table_insert)
     }
     BOOST_REQUIRE_EQUAL(table.size(), 5);
     BOOST_REQUIRE(!table.empty());
-    BOOST_TEST_MESSAGE("re insert_uniuqe");
 
     for (auto x : {1,2,3,4,5}) {
         auto iter = table.insert_dup(x);
@@ -81,7 +85,9 @@ BOOST_AUTO_TEST_CASE(hash_table_lookup)
     }
 
     for (auto x : list) {
-        BOOST_REQUIRE(table.find(x) != table.end());
+        auto iter = table.find(x);
+        BOOST_REQUIRE_EQUAL(*iter, x);
+        BOOST_REQUIRE(iter != table.end());
     }
 
 
@@ -92,9 +98,9 @@ BOOST_AUTO_TEST_CASE(hash_table_lookup)
     for (auto x : list) {
         auto iters = table.equal_range(x);
 
-        BOOST_REQUIRE(iters.first != table.end());
-        BOOST_REQUIRE(++iters.first == iters.second);
         BOOST_REQUIRE_EQUAL(table.count(x), 1);
+        BOOST_REQUIRE(iters.first != table.end());
+        BOOST_REQUIRE(mstd::distance(iters.first, iters.second) == 1);
     }
 
     for (auto x : { 0, 5, 7}) {
@@ -106,4 +112,3 @@ BOOST_AUTO_TEST_CASE(hash_table_lookup)
 
     BOOST_REQUIRE(!table.empty());
 }
-*/
