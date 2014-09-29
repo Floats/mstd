@@ -39,6 +39,7 @@ namespace mstd {
             return result;
         }
 
+        //! common concepts
         template <class T1, class T2>
         constexpr bool BitCopyable()
         {

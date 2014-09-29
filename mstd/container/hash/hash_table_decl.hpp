@@ -373,6 +373,5 @@ namespace mstd {
 //! \todo   add erase(first, last)
 //! \todo   add swap
 //! \todo   add insert(first, last)
-//! \todo   fix the bug of equal_range
 
 #endif //! MSTD_CONTAINER_HASH_TABLE_DECL_HPP_
