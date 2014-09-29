@@ -52,22 +52,7 @@ namespace mstd {
                 //! if the current node chain is exhausted, find the next
                 //! non-exhausted chain.
                 if (iter == nodes.end()) {
-                    const auto next_bnum = self.table_.bucket_num_(obj) + 1;
-
-                    auto first = self.table_.buckets_.begin() + next_bnum;
-                    auto last = self.table_.buckets_.end();
-
-                    if (first < last) {
-                        using ref_type = decltype(nodes);
-
-                        auto i = std::find_if(first, last, [](ref_type v){
-                            return !v.empty();
-                        });
-
-                        if (i != last) {
-                            iter = i->begin();
-                        }
-                    }
+                    iter = self.table_.next_bucket_node_iterator_(obj);
                 }
 
                 return self;

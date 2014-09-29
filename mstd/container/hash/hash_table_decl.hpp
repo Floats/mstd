@@ -33,6 +33,7 @@ namespace mstd {
             friend struct hash_iterator_mixin;
 
         public:
+            using self_type = hash_table;
             using key_type = Key;
             using value_type = Value;
             using allocator = Allocator;
@@ -153,12 +154,7 @@ namespace mstd {
                     return equal_(obj, other);
                 });
 
-                if (iter != nodes.end()) {
-                    return {*this, iter};
-                }
-                else {
-                    return this->end();
-                }
+                return {*this, iter};
             }
 
             const_iterator find(const_reference obj) const
@@ -185,6 +181,10 @@ namespace mstd {
                         assert(equal_(*other, obj));
                     }
 
+                    if (other == nodes.end()) {
+                        other = next_bucket_node_iterator_(obj);
+                    }
+
                     return {{*this, iter}, {*this, other}};
                 }
                 else {
@@ -196,6 +196,27 @@ namespace mstd {
                 equal_range(const_reference obj) const
             {
                 return {self_().equal_range(obj)};
+            }
+
+        private:
+            auto next_bucket_node_iterator_(const_reference obj)
+            {
+                const auto next_bnum = bucket_num_(obj) + 1;
+
+                auto first = buckets_.begin() + next_bnum;
+                auto last = buckets_.end();
+
+                if (first < last) {
+                    auto iter = std::find_if(first, last, [](const node_list& v){
+                        return !v.empty();
+                    });
+
+                    if (iter != buckets_.end()) {
+                        return iter->begin();
+                    }
+                }
+
+                return typename node_list::iterator{};
             }
             //! @}
 
@@ -348,5 +369,10 @@ namespace mstd {
         };
     }  // of namespace detail
 }  // of namespace mstd
+
+//! \todo   add erase(first, last)
+//! \todo   add swap
+//! \todo   add insert(first, last)
+//! \todo   fix the bug of equal_range
 
 #endif //! MSTD_CONTAINER_HASH_TABLE_DECL_HPP_
