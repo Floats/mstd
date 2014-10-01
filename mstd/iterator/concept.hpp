@@ -1,6 +1,7 @@
 #ifndef MSTD_ITERATOR_CONCEPT_HPP_
 #define MSTD_ITERATOR_CONCEPT_HPP_
 
+#include <mstd/detail/concept.hpp>
 #include <mstd/iterator/meta.hpp>
 #include <mstd/iterator/tag.hpp>
 #include <type_traits>
