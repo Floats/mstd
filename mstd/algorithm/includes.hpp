@@ -1,8 +1,7 @@
 #ifndef MSTD_ALGORITHM_INCLUES_HPP_
 #define MSTD_ALGORITHM_INCLUES_HPP_
 
-#include <mstd/detail/concept.hpp>
-#include <mstd/detail/heap.hpp>
+#include <mstd/iterator/concept.hpp>
 
 namespace mstd {
     template <class Iter1, class Iter2>

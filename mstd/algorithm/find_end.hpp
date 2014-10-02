@@ -1,7 +1,6 @@
 #ifndef MSTD_ALGORITHM_FIND_END_HPP_
 #define MSTD_ALGORITHM_FIND_END_HPP_
 
-#include <mstd/detail/concept.hpp>
 #include <mstd/iterator/concept.hpp>
 #include <mstd/algorithm/search.hpp>
 

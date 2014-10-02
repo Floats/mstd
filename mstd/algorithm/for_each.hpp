@@ -2,7 +2,6 @@
 #define MSTD_ALGORITHM_FOR_EACH_HPP_
 
 #include <utility>
-#include <mstd/detail/concept.hpp>
 #include <mstd/iterator/concept.hpp>
 
 namespace mstd {

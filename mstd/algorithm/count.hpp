@@ -1,7 +1,6 @@
 #ifndef MSTD_ALGORITHM_COUNT_HPP_
 #define MSTD_ALGORITHM_COUNT_HPP_
 
-#include <mstd/detail/concept.hpp>
 #include <mstd/iterator/concept.hpp>
 #include <mstd/iterator/meta.hpp>
 

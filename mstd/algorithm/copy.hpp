@@ -4,7 +4,6 @@
 #include <cstring>
 #include <type_traits>
 #include <mstd/iterator/meta.hpp>
-#include <mstd/detail/concept.hpp>
 #include <mstd/iterator/concept.hpp>
 
 namespace mstd {
