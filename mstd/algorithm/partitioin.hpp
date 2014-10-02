@@ -17,14 +17,15 @@ namespace mstd {
         while (first != last) {
             // spot the first element not satisfying pred
             while (first != last && pred(*first)) ++first;
-
-            while (first != last && !pred(*last)) --last;
+            while (first != last && !pred(*--last)) {}
 
             // now first points to an element not satisfying pred
             // last points to an element satisfying pred
             // and first <= last
             if (first != last) {
                 mstd::iter_swap(first, last);
+
+                ++first;
             }
         }
 
