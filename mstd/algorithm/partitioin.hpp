@@ -13,15 +13,16 @@ namespace mstd {
     Require<BidirectionalIterator<Iter>(), Iter>
         partition(Iter first, Iter last, Pred pred)
     {
-        //! \todo   I am just dazzled.
         while (first != last) {
+            // Loop invariants:
+            //  [beg, first) pred is true
+            //  [first, last) elements not processed yet
+            //  [last, end) pred is false
+
             // spot the first element not satisfying pred
             while (first != last && pred(*first)) ++first;
             while (first != last && !pred(*--last)) {}
 
-            // now first points to an element not satisfying pred
-            // last points to an element satisfying pred
-            // and first <= last
             if (first != last) {
                 mstd::iter_swap(first, last);
 
