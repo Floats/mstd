@@ -9,9 +9,11 @@ namespace mstd {
     Require<BidirectionalIterator<Iter>() && !RandomAccessIterator<Iter>()>
         reverse(Iter first, Iter last)
     {
-        for (; first != last; ++first) {
+        while (first != last) {
             if (first != --last) {
                 mstd::iter_swap(first, last);
+
+                ++first;
             }
         }
     }
