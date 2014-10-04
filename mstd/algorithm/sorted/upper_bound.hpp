@@ -18,8 +18,7 @@ namespace mstd {
             // only *len* and *first* are available.
             auto half = len / 2;
 
-            auto mid = first;
-            mstd::advance(mid, half);
+            auto mid = mstd::next(first, half);
 
             if (val < *mid) {
                 // mid is a loose upper bound for val, try to find a tight bound
@@ -29,7 +28,7 @@ namespace mstd {
             else {
                 // mid is a lower bound for val, run the algorithm on
                 // [mid + 1, mid + len)
-                first = ++mid;
+                first = mstd::next(mid);
                 len -= (half + 1);
             }
 

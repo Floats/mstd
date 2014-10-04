@@ -29,12 +29,11 @@ namespace mstd {
             // only *len* and *first* are available.
             auto half = len / 2;
 
-            auto mid = first;
-            mstd::advance(mid, half);
+            auto mid = mstd::next(first, half);
 
             if (*mid < val) {
                 // mid is a loose lower bound for val, try to find a tight bound
-                first = ++mid;
+                first = mstd::next(mid);
                 len -= (half + 1);
             }
             else {

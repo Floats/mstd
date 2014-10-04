@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <mstd/iterator/meta.hpp>
+#include <mstd/iterator/concept.hpp>
 
 namespace mstd {
     namespace detail {
@@ -66,6 +67,22 @@ namespace mstd {
     inline void advance(Iterator& iter, Distance n)
     {
         detail::advance_(iter, n, iterator_category_t<Iterator>{});
+    }
+
+    template <class Iter>
+    inline Require<InputIterator<Iter>(), Iter>
+        next(Iter iter, difference_type_t<Iter> n = 1)
+    {
+        mstd::advance(iter, n);
+        return iter;
+    }
+
+    template <class Iter>
+    inline Require<BidirectionalIterator<Iter>(), Iter>
+        prev(Iter iter, difference_type_t<Iter> n = 1)
+    {
+        mstd::advance(iter, -n);
+        return iter;
     }
 }
 
