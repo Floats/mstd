@@ -72,11 +72,8 @@ namespace mstd {
     Require<RandomAccessIterator<Iter>()>
         rotate(Iter first, Iter mid, Iter last)
     {
-        const auto total_n = last - first;
-        const auto n1 = mid - first;
-        auto n = detail::gdc(total_n, n1);
-
         //! \todo   implement this!
+        assert(!"I cannot understand the algorithm");
     }
 
     /*! Provided a distinct target, the implementation is quite trivial */
