@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <mstd/iterator/meta.hpp>
 #include <mstd/iterator/concept.hpp>
+#include <mstd/detail/bit_copyable.hpp>
 
 namespace mstd {
     namespace detail {
@@ -38,17 +39,8 @@ namespace mstd {
             return result;
         }
 
-        //! common concepts
         template <class T1, class T2>
-        constexpr bool BitCopyable()
-        {
-            using t1 = typename std::remove_const<T1>::type;
-            return std::has_trivial_copy_assign<T1>::value &&
-                   std::is_same<t1, T2>::value;
-        }
-
-        template <class T1, class T2>
-        inline Require<BitCopyable<T1, T2>(),T2*>
+        inline Require<detail::BitCopyable<T1, T2>(),T2*>
             copy_aux_(T1* first, T1* last, T2* result)
         {
             const auto n = last - first;

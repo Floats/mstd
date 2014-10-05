@@ -5,7 +5,7 @@
 
 namespace mstd {
     template <class T>
-    inline void swap(T&& x, T&& y)
+    inline void swap(T&& x, T&& y) noexcept(noexcept(x = std::move(y)))
     {
         auto tmp = std::move(x);
 

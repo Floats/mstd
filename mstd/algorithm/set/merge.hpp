@@ -71,6 +71,8 @@ namespace mstd {
 
         return mstd::copy(first1, last1, mstd::copy(first2, last2, destination));
     }
+
+
 }  // of namespace mstd
 
 #endif //! MSTD_ALGORITHM_MERGE_HPP_
